@@ -4,7 +4,7 @@ import (
 	"github.com/spidernest-go/logger"
 )
 
-func (t *Track) Insert() error {
+func (t *Track) New() error {
 	_, err := db.InsertInto("music").
 		Values(t).
 		Exec()
