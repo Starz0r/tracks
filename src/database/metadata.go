@@ -1,10 +1,14 @@
 package database
 
 import (
+	"time"
+
 	"github.com/spidernest-go/logger"
 )
 
 func (t *Track) New() error {
+	t.DateCreated = time.Now()
+	t.DateModified = time.Unix(0, 0)
 	_, err := db.InsertInto("music").
 		Values(t).
 		Exec()
