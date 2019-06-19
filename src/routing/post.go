@@ -21,7 +21,7 @@ func createTrack(c echo.Context) error {
 			Message: "Music track data was invalid or malformed."})
 	}
 
-	err := t.Insert()
+	err := t.New()
 	if err != nil {
 		return c.JSON(http.StatusNotAcceptable, &struct {
 			Message string
