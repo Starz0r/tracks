@@ -36,3 +36,20 @@ func getTrackByID(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, t)
 }
+
+func getTrackByName(c echo.Context) error {
+	title := c.Param("title")
+
+	ts, err := database.SelectName(title)
+	if err != nil && err != sql.ErrNoRows {
+		logger.Error().
+			Err(err).
+			Msg("")
+		return c.JSON(http.StatusNotAcceptable, &struct {
+			Message string
+		}{
+			Message: "Invalid or malformed music track data."})
+	}
+
+	return c.JSON(http.StatusOK, ts)
+}
