@@ -10,7 +10,7 @@ import (
 	"github.com/spidernest-go/mux"
 )
 
-func getTrackByID(c echo.Context) error {
+func getTracksByID(c echo.Context) error {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		logger.Error().
