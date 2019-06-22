@@ -2,6 +2,7 @@ package routing
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/orchestrafm/music/src/database"
 	"github.com/spidernest-go/logger"
@@ -21,7 +22,18 @@ func editTrack(c echo.Context) error {
 			Message: "Invalid or malformed music track data."})
 	}
 
-	err := t.Edit()
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		logger.Error().
+			Err(err).
+			Msg("Invalid Parameters for editing a track.")
+
+		return c.JSON(http.StatusNotAcceptable, &struct {
+			Message string
+		}{
+			Message: "Invalid or malformed music track data."})
+	}
+	err = t.Edit(id)
 	if err != nil {
 		logger.Error().
 			Err(err).
