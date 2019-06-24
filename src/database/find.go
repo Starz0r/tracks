@@ -7,7 +7,7 @@ import (
 )
 
 func SelectID(id uint64) (*Track, error) {
-	tracks := db.Collection("music")
+	tracks := db.Collection("tracks")
 	rs := tracks.Find(id)
 	t := *new(Track)
 	err := rs.One(&t)
@@ -26,7 +26,7 @@ func SelectID(id uint64) (*Track, error) {
 
 func SelectName(name string) ([]*Track, error) {
 	var ts []*Track
-	tracks := db.Collection("music")
+	tracks := db.Collection("tracks")
 	rs := tracks.Find().Where("title LIKE", name+"%")
 
 	err := rs.All(&ts)

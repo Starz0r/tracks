@@ -9,7 +9,7 @@ import (
 func (t *Track) New() error {
 	t.DateCreated = time.Now()
 	t.DateModified = time.Unix(0, 0)
-	_, err := db.InsertInto("music").
+	_, err := db.InsertInto("tracks").
 		Values(t).
 		Exec()
 

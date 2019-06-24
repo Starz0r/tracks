@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/orchestrafm/music/src/database"
-	"github.com/orchestrafm/music/src/routing"
+	"github.com/orchestrafm/tracks/src/database"
+	"github.com/orchestrafm/tracks/src/routing"
 	"github.com/spidernest-go/logger"
 )
 

@@ -5,7 +5,7 @@ import (
 )
 
 func Remove(id uint64) error {
-	err := db.Collection("music").Find(id).Delete()
+	err := db.Collection("tracks").Find(id).Delete()
 	if err != nil {
 		logger.Error().
 			Err(err).

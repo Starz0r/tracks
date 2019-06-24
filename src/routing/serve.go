@@ -12,12 +12,12 @@ func ListenAndServe() {
 	r = echo.New()
 
 	v0 := r.Group("/api/v0")
-	v0.POST("/music", createTrack)
-	v0.PUT("/music", updateTrack)
-	v0.PATCH("/music/:id", editTrack)
-	v0.GET("/music/:id", getTrackByID)
-	v0.DELETE("/music/:id", deleteTrack)
-	v0.GET("/music/:title", getTracksByName)
+	v0.POST("/track", createTrack)
+	v0.PUT("/track", updateTrack)
+	v0.PATCH("/track/:id", editTrack)
+	v0.GET("/track/:id", getTrackByID)
+	v0.DELETE("/track/:id", deleteTrack)
+	v0.GET("/track/:title", getTracksByName)
 
 	r.Start(":5000")
 }

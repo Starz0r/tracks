@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/orchestrafm/music/src/database"
+	"github.com/orchestrafm/tracks/src/database"
 	"github.com/spidernest-go/logger"
 	"github.com/spidernest-go/mux"
 )

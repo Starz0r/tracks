@@ -9,7 +9,7 @@ import (
 func (t *Track) Update() error {
 	// TODO: Check if all struct fields are present
 	// TODO: Abort if the Track ID isn't already present in the database
-	tracks := db.Collection("music")
+	tracks := db.Collection("tracks")
 	rs := tracks.Find(t.ID)
 	// TODO: Check if DateCreated is not equal
 	t.DateModified = time.Now()
@@ -23,7 +23,7 @@ func (t *Track) Update() error {
 }
 
 func (t *Track) Edit(id uint64) error {
-	tracks := db.Collection("music")
+	tracks := db.Collection("tracks")
 	rs := tracks.Find(id)
 	// TODO: Check if DateCreated is not equal
 	t.DateModified = time.Now()
