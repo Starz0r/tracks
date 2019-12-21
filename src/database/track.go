@@ -8,6 +8,7 @@ type Track struct {
 	ID             uint64    `db:"id" json:"id,omitempty"`
 	DateCreated    time.Time `db:"date_created" json:"date_created,omitempty"`
 	DateModified   time.Time `db:"date_modified" json:"date_modified,omitempty"`
+	Publisher      string    `db:"publisher" json:"publisher,omitempty"`
 	Jacket         string    `db:"jacket" json:"jacket,omitempty"`
 	Genre          string    `db:"genre" json:"genre,omitempty"`
 	Credit         string    `db:"credit" json:"credit,omitempty"`
