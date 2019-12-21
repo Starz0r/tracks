@@ -9,6 +9,13 @@ import (
 )
 
 func createTrack(c echo.Context) error {
+	if err := FullAuthCheck(c); err != nil {
+		logger.Info().
+			Msg("user intent to create a new track, but was unauthorized.")
+
+		return err
+	}
+
 	t := new(database.Track)
 	if err := c.Bind(t); err != nil {
 		logger.Error().

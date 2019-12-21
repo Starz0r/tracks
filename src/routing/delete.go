@@ -10,6 +10,19 @@ import (
 )
 
 func deleteTrack(c echo.Context) error {
+	// auth check
+	admin, auth := AuthorizationCheck(c)
+	if auth != true {
+		logger.Info().
+			Msg("user intent to create a delete a track, but was unauthorized.")
+
+		return c.JSON(http.StatusUnauthorized, &struct {
+			Message string
+		}{
+			Message: "Insufficient Permissions."})
+	}
+
+	// track search
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		logger.Error().
@@ -22,6 +35,14 @@ func deleteTrack(c echo.Context) error {
 			Message: "Invalid or malformed music track data."})
 	}
 
+	// remove track
+	t, _ := database.SelectID(id)
+	if !admin && t.Publisher != SelfAuthCheck(c).Subject {
+		return c.JSON(http.StatusUnauthorized, &struct {
+			Message string
+		}{
+			Message: "Missing Ownership."})
+	}
 	err = database.Remove(id)
 	if err != nil {
 		logger.Error().
