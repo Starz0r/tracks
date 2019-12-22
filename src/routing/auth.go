@@ -27,6 +27,7 @@ type jwtExtendedClaims struct {
 }
 
 func decodeToClaims(src, dst interface{}) error {
+	//BUGFIX: Introduced in b7fdf80, I'd like to get rid of this function
 	dec, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
 		TagName: "json",
 		Result:  dst,
