@@ -1,5 +1,6 @@
 CREATE TABLE `tracks` (
     `id` INT(8) UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    `publisher` VARCHAR(255) NOT NULL,
     `date_created` DATETIME NOT NULL DEFAULT NOW(),
     `date_modified` DATETIME,
     `jacket` TEXT NOT NULL,
