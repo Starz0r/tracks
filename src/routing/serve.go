@@ -4,6 +4,7 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
+	"net/http"
 
 	"github.com/spidernest-go/logger"
 	"github.com/spidernest-go/mux"
@@ -44,6 +45,13 @@ func ListenAndServe() {
 
 	// route apis and start http multiplexer
 	r = echo.New()
+
+	r.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		Skipper:      middleware.DefaultSkipper,
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
 
 	v0 := r.Group("/api/v0")
 	v0AuthReq := v0.Group("", middleware.JWTWithConfig(middleware.JWTConfig{
