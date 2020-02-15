@@ -17,7 +17,7 @@ type Track struct {
 	Title          string    `db:"title" json:"title,omitempty"`
 	TitleRomani    string    `db:"title_romani" json:"title_romani,omitempty"`
 	Artists        string    `db:"artists" json:"artists,omitempty"`
-	ArtistsRomani  string    `db:"artists_romani,omitempty" json:"artists_romani,omitempty"`
+	ArtistsRomani  *string   `db:"artists_romani,omitempty" json:"artists_romani,omitempty"`
 	Subtitle       string    `db:"subtitle" json:"subtitle,omitempty"`
-	SubtitleRomani string    `db:"subtitle_romani,omitempty" json:"subtitle_romani,omitempty"`
+	SubtitleRomani *string   `db:"subtitle_romani,omitempty" json:"subtitle_romani,omitempty"`
 }
