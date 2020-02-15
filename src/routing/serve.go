@@ -64,6 +64,7 @@ func ListenAndServe() {
 	v0.GET("/track/:id", getTrackByID)
 	v0AuthReq.DELETE("/track/:id", deleteTrack)
 	v0.GET("/track/:title", getTracksByName)
+	v0.GET("/track/recent/:limit", getTracksByRecent)
 
 	r.Start(":5001")
 }

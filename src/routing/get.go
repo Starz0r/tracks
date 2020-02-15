@@ -53,3 +53,37 @@ func getTracksByName(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, ts)
 }
+
+func getTracksByRecent(c echo.Context) error {
+	limit, err := strconv.ParseInt(c.Param("limit"), 10, 64)
+	l := *new(int)
+	if limit >= 50 {
+		l = 50
+	} else {
+		l = int(limit)
+	}
+
+	if err != nil {
+		logger.Error().
+			Err(err).
+			Msg("Invalid Parameters for getting a track.")
+
+		return c.JSON(http.StatusNotAcceptable, &struct {
+			Message string
+		}{
+			Message: "Invalid or malformed music track data."})
+	}
+
+	ts, err := database.SelectRecent(l)
+	if err != nil && err != sql.ErrNoRows {
+		logger.Error().
+			Err(err).
+			Msg("")
+		return c.JSON(http.StatusNotAcceptable, &struct {
+			Message string
+		}{
+			Message: "Invalid or malformed music track data."})
+	}
+
+	return c.JSON(http.StatusOK, ts)
+}
