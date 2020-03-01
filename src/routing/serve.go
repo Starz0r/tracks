@@ -24,7 +24,7 @@ doBgwAWghhHc4WSTqyGbsVgl82qHvV+7Z9MmGq1k9fUk5zNtnP7Ou+gv2FBEMu9p
 QQIDAQAB
 -----END PUBLIC KEY-----`
 
-func ListenAndServe() {
+func ListenAndServe() error {
 	// decode pem block into rsa public key
 	block, _ := pem.Decode([]byte(rsaPublicKey))
 	if block == nil {
@@ -66,5 +66,5 @@ func ListenAndServe() {
 	v0.GET("/track/:title", getTracksByName)
 	v0.GET("/track/recent/:limit", getTracksByRecent)
 
-	r.Start(":5001")
+	return r.Start(":5001")
 }
