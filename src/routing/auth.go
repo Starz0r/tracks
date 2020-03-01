@@ -1,6 +1,7 @@
 package routing
 
 import (
+	"errors"
 	"net/http"
 	"strings"
 
@@ -25,6 +26,11 @@ type jwtExtendedClaims struct {
 	Subject           string `json:"sub,omitempty"`
 	//jwt.StandardClaims
 }
+
+var (
+	ErrAuthParse   = errors.New("authorization token could not be parsed")
+	ErrPermissions = errors.New("insufficient permissions")
+)
 
 func decodeToClaims(src, dst interface{}) error {
 	//BUGFIX: Introduced in b7fdf80, I'd like to get rid of this function
@@ -54,19 +60,21 @@ func FullAuthCheck(c echo.Context) error {
 	claims := new(jwtExtendedClaims)
 	err := decodeToClaims(user.Claims, claims)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, &struct {
+		c.JSON(http.StatusInternalServerError, &struct {
 			Message string
 		}{
-			Message: "Authorization Token could not be parsed."})
+			Message: ErrAuthParse.Error()})
+		return ErrAuthParse
 	}
 
 	auth := strings.Contains(claims.Scope, "track:write") || strings.Contains(claims.Scope, "track:admin")
 	admin := strings.Contains(claims.Scope, "track:admin")
 	if !admin || !auth {
-		return c.JSON(http.StatusUnauthorized, &struct {
+		c.JSON(http.StatusUnauthorized, &struct {
 			Message string
 		}{
-			Message: "Insufficient Permissions."})
+			Message: ErrPermissions.Error()})
+		return ErrPermissions
 	}
 	return nil
 }

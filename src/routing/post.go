@@ -13,7 +13,7 @@ func createTrack(c echo.Context) error {
 		logger.Info().
 			Msg("user intent to create a new track, but was unauthorized.")
 
-		return err
+		return nil
 	}
 
 	t := new(database.Track)

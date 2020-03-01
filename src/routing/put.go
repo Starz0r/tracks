@@ -18,7 +18,7 @@ func updateTrack(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, &struct {
 			Message string
 		}{
-			Message: "Insufficient Permissions."})
+			Message: ErrPermissions.Error()})
 	}
 
 	// data binding
