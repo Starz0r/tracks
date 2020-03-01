@@ -15,5 +15,10 @@ func main() {
 	}
 	database.Synchronize()
 
-	routing.ListenAndServe()
+	err = routing.ListenAndServe()
+	if err != nil {
+		logger.Error().
+			Err(err).
+			Msg("REST Server failed to start.")
+	}
 }
