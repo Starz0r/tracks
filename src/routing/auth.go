@@ -15,6 +15,11 @@ type jwtExtendedClaims struct {
 	RealmAccess struct {
 		Roles []string `json:"roles,omitempty"`
 	} `json:"realm_access,omitempty"`
+	ResourceAccess struct {
+		ApplicationServices struct {
+			Roles []string `json:"roles,omitempty"`
+		} `json:"application-services,omitempty"`
+	} `json:"resource_access,omitempty"`
 	Scope             string `json:"scope"`
 	PreferredUsername string `json:"preferred_username,omitempty"`
 	Audience          string `json:"aud,omitempty"`
@@ -52,6 +57,29 @@ func decodeToClaims(src, dst interface{}) error {
 		return err
 	}
 	return nil
+}
+
+func HasRole(c echo.Context, reqrole string) bool {
+	user := c.Get("user").(*jwt.Token)
+	claims := new(jwtExtendedClaims)
+	err := decodeToClaims(user.Claims, claims)
+	if err != nil {
+		logger.Warn().
+			Err(err).
+			Msg("Claims were malformed or nonexistant, returning false.")
+		return false
+	}
+
+	for _, role := range claims.
+		ResourceAccess.
+		ApplicationServices.
+		Roles {
+		if role == reqrole {
+			return true
+		}
+	}
+
+	return false
 }
 
 func FullAuthCheck(c echo.Context) error {
