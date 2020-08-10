@@ -9,11 +9,14 @@ import (
 )
 
 func createTrack(c echo.Context) error {
-	if err := FullAuthCheck(c); err != nil {
+	if authorized := HasRole(c, "create-track"); authorized != true {
 		logger.Info().
 			Msg("user intent to create a new track, but was unauthorized.")
 
-		return nil
+		return c.JSON(http.StatusUnauthorized, &struct {
+			Message string
+		}{
+			Message: ErrPermissions.Error()})
 	}
 
 	t := new(database.Track)
