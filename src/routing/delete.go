@@ -12,7 +12,7 @@ import (
 func deleteTrack(c echo.Context) error {
 	// auth check
 	admin := HasRole(c, "manage-tracks")
-	auth := HasRole(c, "create-tracks")
+	auth := HasRole(c, "create-track")
 	if auth != true {
 		logger.Info().
 			Msg("user intent to create a delete a track, but was unauthorized.")
