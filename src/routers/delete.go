@@ -1,33 +1,34 @@
-package routing
+package routers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/orchestrafm/tracks/src/database"
 	"github.com/spidernest-go/logger"
 	"github.com/spidernest-go/mux"
 )
 
-func updateTrack(c echo.Context) error {
+func deleteTrack(c echo.Context) error {
 	// auth check
 	admin := HasRole(c, "manage-tracks")
 	auth := HasRole(c, "create-track")
 	if auth != true {
 		logger.Info().
-			Msg("user intent to create a update a track, but was unauthorized.")
+			Msg("user intent to create a delete a track, but was unauthorized.")
 
 		return c.JSON(http.StatusUnauthorized, &struct {
 			Message string
 		}{
-			Message: ErrPermissions.Error()})
+			Message: "Insufficient Permissions."})
 	}
 
-	// data binding
-	t := new(database.Track)
-	if err := c.Bind(t); err != nil {
+	// track search
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
 		logger.Error().
 			Err(err).
-			Msg("Request Data could not be binded to datastructure.")
+			Msg("Invalid Parameters for deleting a track.")
 
 		return c.JSON(http.StatusNotAcceptable, &struct {
 			Message string
@@ -35,27 +36,27 @@ func updateTrack(c echo.Context) error {
 			Message: "Invalid or malformed music track data."})
 	}
 
-	// update resource
+	// remove track
+	t, _ := database.SelectID(id)
 	if !admin && t.Publisher != SelfAuthCheck(c).Subject {
 		return c.JSON(http.StatusUnauthorized, &struct {
 			Message string
 		}{
 			Message: "Missing Ownership."})
 	}
-	err := t.Update()
+	err = database.Remove(id)
 	if err != nil {
 		logger.Error().
 			Err(err).
-			Msg("Music Track could not be updated.")
+			Msg("Invalid Parameters for getting a track.")
 
 		return c.JSON(http.StatusNotAcceptable, &struct {
 			Message string
 		}{
 			Message: "Invalid or malformed music track data."})
 	}
-
 	return c.JSON(http.StatusOK, &struct {
 		Message string
 	}{
-		Message: "Track edited successfully."})
+		Message: "Track deleted successfully."})
 }

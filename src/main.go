@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/orchestrafm/tracks/src/database"
-	"github.com/orchestrafm/tracks/src/routing"
+	"github.com/orchestrafm/tracks/src/routers"
 	"github.com/spidernest-go/logger"
 )
 
@@ -15,7 +15,7 @@ func main() {
 	}
 	database.Synchronize()
 
-	err = routing.ListenAndServe()
+	err = routers.ListenAndServe()
 	if err != nil {
 		logger.Error().
 			Err(err).

@@ -1,15 +1,14 @@
-package routing
+package routers
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/orchestrafm/tracks/src/database"
 	"github.com/spidernest-go/logger"
 	"github.com/spidernest-go/mux"
 )
 
-func editTrack(c echo.Context) error {
+func updateTrack(c echo.Context) error {
 	// auth check
 	admin := HasRole(c, "manage-tracks")
 	auth := HasRole(c, "create-track")
@@ -20,7 +19,7 @@ func editTrack(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, &struct {
 			Message string
 		}{
-			Message: "Insufficient Permissions."})
+			Message: ErrPermissions.Error()})
 	}
 
 	// data binding
@@ -36,19 +35,6 @@ func editTrack(c echo.Context) error {
 			Message: "Invalid or malformed music track data."})
 	}
 
-	// validation
-	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
-	if err != nil {
-		logger.Error().
-			Err(err).
-			Msg("Invalid Parameters for editing a track.")
-
-		return c.JSON(http.StatusNotAcceptable, &struct {
-			Message string
-		}{
-			Message: "Invalid or malformed music track data."})
-	}
-
 	// update resource
 	if !admin && t.Publisher != SelfAuthCheck(c).Subject {
 		return c.JSON(http.StatusUnauthorized, &struct {
@@ -56,7 +42,7 @@ func editTrack(c echo.Context) error {
 		}{
 			Message: "Missing Ownership."})
 	}
-	err = t.Edit(id)
+	err := t.Update()
 	if err != nil {
 		logger.Error().
 			Err(err).
