@@ -87,3 +87,23 @@ func getTracksByRecent(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, ts)
 }
+
+func getCount(c echo.Context) error {
+	amt, err := database.SelectCount()
+	if err != nil {
+		logger.Error().
+			Err(err).
+			Msg("Counting current amount of submitted tracks failed.")
+
+		return c.JSON(http.StatusInternalServerError, &struct {
+			Message string
+		}{
+			Message: "Database had an problem getting the current amount of tracks."})
+	}
+
+	return c.JSON(http.StatusOK, &struct {
+		Amount uint64
+	}{
+		Amount: amt})
+
+}

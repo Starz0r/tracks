@@ -59,6 +59,7 @@ func ListenAndServe() error {
 	v0AuthReq.DELETE("/track/:id", deleteTrack)
 	v0.GET("/track/:title", getTracksByName)
 	v0.GET("/track/recent/:limit", getTracksByRecent)
+	v0.GET("/track", getCount)
 
 	return r.Start(":5001")
 }
