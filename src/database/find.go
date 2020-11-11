@@ -61,3 +61,7 @@ func SelectRecent(limit int) ([]*Track, error) {
 		return ts, nil
 	}
 }
+
+func SelectCount() (uint64, error) {
+	return db.Collection("tracks").Find().Count()
+}
