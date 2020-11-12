@@ -74,7 +74,21 @@ func getTracksByRecent(c echo.Context) error {
 			Message: "Invalid or malformed music track data."})
 	}
 
-	ts, err := database.SelectRecent(l)
+	// offset is an optional parameter
+	o, err := strconv.Atoi(c.QueryParam("offset"))
+	if err != nil && c.QueryParam("offset") != "" {
+		logger.Error().
+			Err(err).
+			Msgf("Passed offset parameter (%s) was not a valid number", c.QueryParam("offset"))
+
+		return c.JSON(http.StatusBadRequest, nil)
+	}
+	// set offset to 0 if it wasn't present in the request
+	if c.QueryParam("offset") == "" {
+		o = 0
+	}
+
+	ts, err := database.SelectRecent(l, o)
 	if err != nil && err != sql.ErrNoRows {
 		logger.Error().
 			Err(err).
@@ -102,8 +116,8 @@ func getCount(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, &struct {
-		Amount uint64
+		Count uint64 `json:"count"`
 	}{
-		Amount: amt})
+		Count: amt})
 
 }
