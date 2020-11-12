@@ -43,10 +43,10 @@ func SelectName(name string) ([]*Track, error) {
 	}
 }
 
-func SelectRecent(limit int) ([]*Track, error) {
+func SelectRecent(limit int, offset int) ([]*Track, error) {
 	var ts []*Track
 	tracks := db.Collection("tracks")
-	rs := tracks.Find().OrderBy("id DESC").Limit(limit)
+	rs := tracks.Find().OrderBy("id DESC").Offset(offset).Limit(limit)
 
 	err := rs.All(&ts)
 	if err != nil && err != sql.ErrNoRows {
